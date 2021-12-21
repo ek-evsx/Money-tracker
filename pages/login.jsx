@@ -1,12 +1,12 @@
 import React from 'react';
 import Head from 'next/head';
-import { Card, Divider, Row } from 'antd';
+import { Card, Divider, Row, Button } from 'antd';
 import { getAuth, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
 import Router from 'next/router';
+import { GoogleOutlined } from '@ant-design/icons';
 
 import { useAuth } from '../hooks/useAuth';
 
-import { GoogleButton } from '../components/GoogleAuth';
 import { Spin } from '../components/Spin';
 
 import styles from '../styles/Login.module.less';
@@ -54,7 +54,14 @@ export default function Login() {
           <Divider />
 
           <Row justify='center'>
-            <GoogleButton onClick={onSignIn} text='Sign in with Google' />
+            <Button
+              type='secondary'
+              size='large'
+              icon={<GoogleOutlined />}
+              onClick={onSignIn}
+            >
+              Sign in with Google
+            </Button>
           </Row>
         </Card>
       </div>
