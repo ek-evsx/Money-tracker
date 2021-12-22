@@ -8,7 +8,8 @@ import { DELAY } from '../utils/constants';
 
 import { Spin } from '../components/Spin';
 
-import '../styles/variables.less';
+import '../styles/variables.css';
+import '../styles/globals.css';
 
 export const AppContext = React.createContext({});
 
