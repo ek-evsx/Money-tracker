@@ -1,38 +1,22 @@
-import React, { useContext } from 'react';
-import { Row, Col, Card, Button, Collapse } from 'antd';
-import { PlusCircleOutlined } from '@ant-design/icons';
+import React, { useContext, useEffect, useState } from 'react';
+import { Row, Col, Card, Collapse, Empty } from 'antd';
+import { getDatabase, ref, onValue } from 'firebase/database';
 
 import getLayout from '../utils/getLayout';
 
 import { AppContext } from '../pages/_app';
 
+import { CreateWallet } from '../components/CreateWallet';
+
 import styles from '../styles/Dashboard.module.less';
 
-const mockData = [
-  {
-    name: 'Wallet 1',
-    currency: 'BYR',
-    amount: 300.55,
-  },
-  {
-    name: 'Wallet 2',
-    currency: 'EUR',
-    amount: -1301.29,
-  },
-  {
-    name: 'Wallet 3',
-    currency: 'USD',
-    amount: 22455.91,
-  },
-];
+const getUserWalletsPath = (userId) => 'users/' + userId + '/wallets';
 
 const CardTitle = (props) => {
   return (
     <div className={styles.cardHeadTitleWrapper}>
       <span className={styles.cardHeadTitle}>{props.title}</span>
-      <Button size='large' type='primary' icon={<PlusCircleOutlined />}>
-        Add
-      </Button>
+      <CreateWallet />
     </div>
   );
 };
@@ -55,22 +39,47 @@ const WalletHeader = (props) => {
 
 export default function Dashboard() {
   const appContext = useContext(AppContext);
-  console.log('appContext', appContext);
+  const [wallets, setWallets] = useState([]);
+
+  useEffect(() => {
+    if (appContext?.user?.uid) {
+      const db = getDatabase();
+      const userWalletsRef = ref(db, getUserWalletsPath(appContext?.user?.uid));
+
+      onValue(userWalletsRef, (snapshot) => {
+        const fetchedWallets = [];
+        const values = snapshot.val();
+
+        Object.keys(values).forEach((key) => fetchedWallets.push(values[key]));
+
+        setWallets(fetchedWallets);
+      });
+    }
+  }, [appContext?.user?.uid]);
+
   return (
     <div className={styles.container}>
       <Row gutter={[16, 16]}>
         <Col span={12}>
-          <Card title={<CardTitle title='Wallets' />}>
-            <Collapse>
-              {mockData.map((wallet, idx) => (
-                <Collapse.Panel
-                  header={<WalletHeader wallet={wallet} />}
-                  key={idx}
-                >
-                  Wallet Description
-                </Collapse.Panel>
-              ))}
-            </Collapse>
+          <Card
+            className={styles.walletCard}
+            hoverable
+            title={<CardTitle title='Wallets' />}
+          >
+            {wallets?.length ? (
+              <Collapse>
+                {wallets?.map((wallet, idx) => (
+                  <Collapse.Panel
+                    header={<WalletHeader wallet={wallet} />}
+                    key={idx}
+                  >
+                    Wallet Description
+                  </Collapse.Panel>
+                ))}
+              </Collapse>
+            ) : (
+              <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+            )}
           </Card>
         </Col>
       </Row>
