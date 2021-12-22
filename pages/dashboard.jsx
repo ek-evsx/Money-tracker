@@ -1,12 +1,11 @@
 import React from 'react';
 
 import getLayout from '../utils/getLayout';
+import { DELAY } from '../utils/constants';
 
 import { useAuth } from '../hooks/useAuth';
 
 import { Spin } from '../components/Spin';
-
-const DELAY = 500;
 
 export default function Dashboard() {
   const isLoading = useAuth({ delay: DELAY });
