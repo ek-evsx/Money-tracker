@@ -2,10 +2,12 @@ import { useEffect, useState } from 'react';
 import Router from 'next/router';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 
+import { ROUTES, DELAY } from '../utils/constants';
+
 export const useAuth = ({
-  defaultRedirectUrl = '/dashboard',
+  defaultRedirectUrl = ROUTES.dashboard,
   shouldRedirect = true,
-  delay = 500,
+  delay = DELAY,
 } = {}) => {
   const [isLoading, setIsLoading] = useState(true);
 
@@ -15,7 +17,7 @@ export const useAuth = ({
     onAuthStateChanged(auth, (user) => {
       let redirectUrl = defaultRedirectUrl;
       if (!user) {
-        redirectUrl = '/login';
+        redirectUrl = ROUTES.login;
       }
 
       setTimeout(() => {

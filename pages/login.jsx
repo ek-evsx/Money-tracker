@@ -7,6 +7,9 @@ import { GoogleOutlined } from '@ant-design/icons';
 
 import { useAuth } from '../hooks/useAuth';
 
+import { ROUTES } from '../utils/constants';
+import { DELAY } from '../utils/constants';
+
 import { Spin } from '../components/Spin';
 
 import styles from '../styles/Login.module.less';
@@ -19,7 +22,7 @@ const onSignIn = () => {
       const user = result.user;
 
       if (user) {
-        Router.push('/dashboard');
+        Router.push(ROUTES.dashboard);
       }
     })
     .catch((error) => {
@@ -33,8 +36,6 @@ const onSignIn = () => {
       console.error('credential', credential);
     });
 };
-
-const DELAY = 500;
 
 export default function Login() {
   const isLoading = useAuth({ delay: DELAY, shouldRedirect: false });
