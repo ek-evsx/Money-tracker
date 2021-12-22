@@ -56,7 +56,6 @@ const WalletHeader = (props) => {
 export default function Dashboard() {
   const appContext = useContext(AppContext);
   console.log('appContext', appContext);
-
   return (
     <div className={styles.container}>
       <Row gutter={[16, 16]}>
