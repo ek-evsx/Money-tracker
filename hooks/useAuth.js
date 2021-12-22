@@ -10,6 +10,7 @@ export const useAuth = ({
   delay = DELAY,
 } = {}) => {
   const [isLoading, setIsLoading] = useState(true);
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
     const auth = getAuth();
@@ -18,6 +19,8 @@ export const useAuth = ({
       let redirectUrl = defaultRedirectUrl;
       if (!user) {
         redirectUrl = ROUTES.login;
+      } else {
+        setUser(user);
       }
 
       setTimeout(() => {
@@ -30,5 +33,5 @@ export const useAuth = ({
     });
   }, []);
 
-  return isLoading;
+  return [isLoading, user];
 };

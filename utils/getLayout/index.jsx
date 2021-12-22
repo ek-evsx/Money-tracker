@@ -24,7 +24,7 @@ const onLogout = () => {
 const onBack = () => Router.back();
 
 export default function getLayout({ title, subTitle = '' }) {
-  return function getWrappedPage(page) {
+  return function getWrappedPage(page, appContext) {
     return (
       <React.Fragment>
         <Head>
@@ -37,7 +37,7 @@ export default function getLayout({ title, subTitle = '' }) {
           className={styles.sitePageHeader}
           onBack={onBack}
           title={title}
-          subTitle={subTitle}
+          subTitle={subTitle || appContext?.user?.displayName}
           ghost={false}
           extra={[
             <Button
