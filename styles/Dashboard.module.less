@@ -1,0 +1,55 @@
+.container {
+  padding: 20px;
+}
+
+.cardHeadTitleWrapper {
+  display: flex;
+  justify-content: space-between;
+}
+
+.cardHeadTitle {
+  font-size: 1.5rem;
+}
+
+.walletInfo {
+  display: flex;
+  width: 100%;
+}
+
+.walletCurrency {
+  font-weight: bold;
+  text-transform: uppercase;
+  flex: 1;
+  position: relative;
+
+  &::after {
+    border-right: 1px solid gray;
+    content: '';
+    position: absolute;
+    right: 0;
+    width: 1px;
+    height: 100%;
+  }
+}
+
+.walletAmount {
+  flex: 2;
+  color:seagreen;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+.walletAmountNegative { 
+  color: darkred;
+}
+
+.walletName {
+  flex: 6;
+  padding: 0 10px;
+}
+
+.walletAmount,
+.walletName,
+.walletCurrency {
+  align-self: center;
+}
