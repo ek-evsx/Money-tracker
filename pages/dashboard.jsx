@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Row, Col, Card, Collapse, Empty } from 'antd';
-import { getDatabase, ref, onValue } from 'firebase/database';
+import { Row, Col, Card, Collapse, Empty, Button, Modal } from 'antd';
+import { getDatabase, ref, onValue, remove } from 'firebase/database';
+import { DeleteOutlined } from '@ant-design/icons';
 
 import getLayout from '../utils/getLayout';
 
@@ -40,6 +41,7 @@ const WalletHeader = (props) => {
 export default function Dashboard() {
   const appContext = useContext(AppContext);
   const [wallets, setWallets] = useState([]);
+  const [walletToDelete, setWalletToDelete] = useState(null);
 
   useEffect(() => {
     if (appContext?.user?.uid) {
@@ -50,12 +52,33 @@ export default function Dashboard() {
         const fetchedWallets = [];
         const values = snapshot.val();
 
-        Object.keys(values).forEach((key) => fetchedWallets.push(values[key]));
+        Object.keys(values).forEach((key) =>
+          fetchedWallets.push({
+            id: key,
+            ...values[key],
+          })
+        );
 
         setWallets(fetchedWallets);
       });
     }
   }, [appContext?.user?.uid]);
+
+  const onConfirmDelete = () => {
+    const db = getDatabase();
+    const userWalletsRef = ref(
+      db,
+      `${getUserWalletsPath(appContext?.user?.uid)}/${walletToDelete.id}`
+    );
+
+    remove(userWalletsRef).then(setWalletToDelete(null)).catch(console.error);
+
+    setWalletToDelete(null);
+  };
+
+  const onCancelDelete = () => setWalletToDelete(null);
+
+  const onDelete = (wallet) => () => setWalletToDelete(wallet);
 
   return (
     <div className={styles.container}>
@@ -73,7 +96,41 @@ export default function Dashboard() {
                     header={<WalletHeader wallet={wallet} />}
                     key={idx}
                   >
-                    Wallet Description
+                    <Row>
+                      <Col span={19}>Wallet Description</Col>
+                      <Col span={5}>
+                        <Row justify='space-between'>
+                          <Button
+                            href={`/wallets/${wallet.id}`}
+                            type='primary'
+                            ghost
+                          >
+                            Details
+                          </Button>
+
+                          <Button
+                            icon={<DeleteOutlined />}
+                            onClick={onDelete(wallet)}
+                            danger
+                            type='primary'
+                          >
+                            Delete
+                          </Button>
+                          <Modal
+                            visible={walletToDelete}
+                            title='Are you shure?'
+                            onCancel={onCancelDelete}
+                            onOk={onConfirmDelete}
+                          >
+                            <p>
+                              Your wallet &quot;{walletToDelete?.name}&quot;
+                              would be deleted!
+                            </p>
+                            <p>Please confirm or decline your action.</p>
+                          </Modal>
+                        </Row>
+                      </Col>
+                    </Row>
                   </Collapse.Panel>
                 ))}
               </Collapse>
