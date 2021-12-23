@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Row, Col, Card, Collapse, Empty, Button, Modal } from 'antd';
 import { getDatabase, ref, onValue, remove } from 'firebase/database';
 import { DeleteOutlined } from '@ant-design/icons';
+import Link from 'next/link';
 
 import { AppContext } from '../../pages/_app';
 
@@ -92,9 +93,19 @@ export const WalletCard = () => {
                 <Col span={19}>Wallet Description</Col>
                 <Col span={5}>
                   <Row justify='space-between'>
-                    <Button href={`/wallets/${wallet.id}`} type='primary' ghost>
-                      Details
-                    </Button>
+                    <Link
+                      href={{
+                        pathname: '/wallets/[id]',
+                        query: {
+                          id: wallet?.id,
+                        },
+                      }}
+                      passHref
+                    >
+                      <Button type='primary' ghost>
+                        Details
+                      </Button>
+                    </Link>
 
                     <Button
                       icon={<DeleteOutlined />}
