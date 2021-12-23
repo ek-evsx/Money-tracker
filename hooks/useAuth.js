@@ -4,11 +4,7 @@ import { getAuth, onAuthStateChanged } from 'firebase/auth';
 
 import { ROUTES, DELAY } from '../utils/constants';
 
-export const useAuth = ({
-  defaultRedirectUrl = ROUTES.dashboard,
-  shouldRedirect = true,
-  delay = DELAY,
-} = {}) => {
+export const useAuth = ({ shouldRedirect = true, delay = DELAY } = {}) => {
   const [isLoading, setIsLoading] = useState(true);
   const [user, setUser] = useState(null);
 
@@ -16,7 +12,8 @@ export const useAuth = ({
     const auth = getAuth();
 
     onAuthStateChanged(auth, (user) => {
-      let redirectUrl = defaultRedirectUrl;
+      let redirectUrl =
+        Router.pathname === '/' ? ROUTES.dashboard : Router.pathname;
       if (!user) {
         redirectUrl = ROUTES.login;
       } else {
