@@ -94,12 +94,7 @@ export const WalletCard = () => {
                 <Col span={5}>
                   <Row justify='space-between'>
                     <Link
-                      href={{
-                        pathname: '/wallets/[id]',
-                        query: {
-                          id: wallet?.id,
-                        },
-                      }}
+                      href={`/wallets/${encodeURIComponent(wallet.id)}`}
                       passHref
                     >
                       <Button type='primary' ghost>
