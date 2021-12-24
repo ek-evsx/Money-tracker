@@ -63,13 +63,13 @@ export default function Wallet() {
                 size={150}
                 strokeWidth={15}
                 percentage={walletData?.percentage}
-                text={walletData?.currency}
+                text={walletData?.amount}
               />
             )}
           </Row>
 
           <Row justify='center'>
-            <h1>{walletData?.amount}</h1>
+            <h1>{walletData?.currency}</h1>
           </Row>
         </Card>
       </Col>
