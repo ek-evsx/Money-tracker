@@ -37,7 +37,7 @@ export const CircularProgress = (props) => {
       <text
         fill={props.color}
         fontWeight={700}
-        fontSize='32px'
+        fontSize='40px'
         x='50%'
         y='50%'
         dy='15px'
