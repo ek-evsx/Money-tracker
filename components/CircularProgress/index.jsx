@@ -35,8 +35,9 @@ export const CircularProgress = (props) => {
         style={{ transition: 'all 1.5s' }}
       />
       <text
-        fill='white'
-        fontSize='30px'
+        fill={props.color}
+        fontWeight={700}
+        fontSize='40px'
         x='50%'
         y='50%'
         dy='15px'
