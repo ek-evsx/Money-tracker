@@ -1,10 +1,11 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { useRouter } from 'next/router';
-import { Row, Col, Card, Empty, Table, Tag, Progress } from 'antd';
+import { Row, Col, Card, Empty, Table, Tag } from 'antd';
 import { getDatabase, ref, onValue } from 'firebase/database';
 import { PieChart, Pie, Cell } from 'recharts';
 import { blue } from '@ant-design/colors';
 
+import { CircularProgress } from '../../components/CircularProgress';
 import { CreateExpenseType } from '../../components/CreateExpenseType';
 
 import getLayout from '../../utils/getLayout';
@@ -147,29 +148,6 @@ const getProgressBarColor = (amount) => {
   }
 };
 
-const getProgressBar = (amount) => {
-  const color = getProgressBarColor(amount);
-
-  return (
-    <Progress
-      type='circle'
-      strokeColor={color}
-      strokeWidth={10}
-      width={230}
-      percent={100}
-      format={() => (
-        <span
-          style={{
-            color: color,
-          }}
-        >
-          {amount}
-        </span>
-      )}
-    />
-  );
-};
-
 export default function Wallet() {
   const appContext = useContext(AppContext);
 
@@ -229,9 +207,15 @@ export default function Wallet() {
                 </Row>
 
                 <Row justify='center' className={styles.progressContainer}>
-                  {!isLoading &&
-                    walletData &&
-                    getProgressBar(walletData?.amount)}
+                  {!isLoading && walletData && (
+                    <CircularProgress
+                      color={getProgressBarColor(walletData?.amount)}
+                      size={230}
+                      strokeWidth={20}
+                      percentage={walletData?.percentage}
+                      text={walletData?.amount}
+                    />
+                  )}
                 </Row>
 
                 <Row justify='center'>
