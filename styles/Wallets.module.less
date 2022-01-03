@@ -13,8 +13,39 @@
 
 .cardContainer {
   height: calc(~"88vh + 10px");
+  overflow: auto;
+  position: relative;
+
+  [class~=ant-card-body] {
+    height: 100%;
+  }
+
+  .emptyContainer {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
 }
 
 .expensesChartContainer {
   margin-top: 10px;
+}
+
+.negativeAmount,
+.positiveAmount {
+  font-weight: 700;
+  font-size: 1.3rem;
+}
+
+.negativeAmount {
+  color: darkred;
+}
+
+.positiveAmount {
+  color: darkgreen;
+}
+
+.expenseTagRow {
+  margin: 5px 0;
 }

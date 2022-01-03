@@ -1,11 +1,13 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { useRouter } from 'next/router';
-import { Row, Col, Card, Badge } from 'antd';
+import { Row, Col, Card, Empty, Table, Tag } from 'antd';
 import { getDatabase, ref, onValue } from 'firebase/database';
 import { PieChart, Pie, Cell } from 'recharts';
+import { blue } from '@ant-design/colors';
 
 import { CircularProgress } from '../../components/CircularProgress';
 import { CreateExpenseType } from '../../components/CreateExpenseType';
+import { AddTransaction } from '../../components/AddTransaction';
 
 import getLayout from '../../utils/getLayout';
 import { DELAY } from '../../utils/constants';
@@ -13,6 +15,92 @@ import { DELAY } from '../../utils/constants';
 import { AppContext } from '../_app';
 
 import styles from '../../styles/Wallets.module.less';
+
+const OUTCOMING = 'outcoming';
+
+const columns = [
+  {
+    title: 'Name',
+    dataIndex: 'name',
+    key: 'name',
+  },
+  {
+    title: 'Transaction type',
+    dataIndex: 'transactionType',
+    key: 'transactionType',
+    align: 'center',
+    render: (text) => (
+      <Tag color={text === OUTCOMING ? 'volcano' : 'green'}>
+        {text.toUpperCase()}
+      </Tag>
+    ),
+  },
+  {
+    title: 'Amount',
+    dataIndex: 'amount',
+    key: 'amount',
+    align: 'center',
+    render: (amount, transaction) => {
+      const isOutcoming = transaction.transactionType === OUTCOMING;
+      return (
+        <div
+          className={
+            isOutcoming ? styles.negativeAmount : styles.positiveAmount
+          }
+        >
+          {isOutcoming && '-'}
+          {amount}
+        </div>
+      );
+    },
+  },
+  {
+    title: 'Expenses type',
+    dataIndex: 'expensesType',
+    key: 'expensesType',
+    align: 'center',
+    render: (expensesType) =>
+      expensesType ? (
+        <Tag color={expensesType.color}>{expensesType?.name}</Tag>
+      ) : (
+        '-'
+      ),
+  },
+  {
+    title: 'Comments',
+    dataIndex: 'comments',
+    key: 'comments',
+  },
+  {
+    title: 'Date',
+    dataIndex: 'date',
+    key: 'date',
+    render: (date) => new Date(date).toLocaleDateString(),
+  },
+];
+
+const transactionData = [
+  {
+    key: '1',
+    name: 'Salary',
+    transactionType: 'incoming',
+    amount: 1000,
+    comments: 'Salary',
+    date: Date.now(),
+  },
+  {
+    key: '2',
+    name: 'Buy a dinner',
+    transactionType: 'outcoming',
+    amount: 10,
+    expensesType: {
+      name: 'Food',
+      color: blue[5],
+    },
+    comments: 'Buy a dinner in a restaurant.',
+    date: Date.now(),
+  },
+];
 
 const data = [
   { name: 'Group A', value: 400 },
@@ -68,6 +156,7 @@ export default function Wallet() {
 
   const [walletData, setWalletData] = useState(null);
   const [expenseTypes, setExpenseTypes] = useState(null);
+  // const [transactions, setTransactions] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -172,11 +261,8 @@ export default function Wallet() {
 
                   <Col span={6}>
                     {expenseTypes?.map((type) => (
-                      <Row key={type.id}>
-                        <Badge
-                          style={{ background: type.color }}
-                          count={type.name}
-                        />
+                      <Row key={type.id} className={styles.expenseTagRow}>
+                        <Tag color={type.color}>{type.name}</Tag>
                       </Row>
                     ))}
                   </Col>
@@ -188,7 +274,17 @@ export default function Wallet() {
 
         <Col span={16}>
           <Card loading={isLoading} className={styles.cardContainer}>
+            <Row justify='space-between'>
+              <AddTransaction />
+            </Row>
             <h1>Transactions list:</h1>
+            {transactionData ? (
+              <Table columns={columns} dataSource={transactionData} />
+            ) : (
+              <div className={styles.emptyContainer}>
+                <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+              </div>
+            )}
           </Card>
         </Col>
       </Row>

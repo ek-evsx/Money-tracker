@@ -9,7 +9,7 @@ import {
   red,
   gold,
 } from '@ant-design/colors';
-import { Modal, Button, Form, Input, Tooltip, Badge } from 'antd';
+import { Modal, Button, Form, Input, Tooltip, Tag } from 'antd';
 import { getDatabase, ref, set, push } from 'firebase/database';
 
 import { AppContext } from '../../pages/_app';
@@ -106,7 +106,7 @@ export const CreateExpenseType = (props) => {
         icon={<PlusCircleOutlined />}
         onClick={showModal}
       >
-        Add
+        Add new type
       </Button>
       <Modal
         title='Create new expense type'
@@ -175,10 +175,7 @@ export const CreateExpenseType = (props) => {
             }
           >
             {({ getFieldValue }) => (
-              <Badge
-                style={{ backgroundColor: getFieldValue('color') }}
-                count={getFieldValue('name')}
-              />
+              <Tag color={getFieldValue('color')}>{getFieldValue('name')}</Tag>
             )}
           </Form.Item>
         </Form>
