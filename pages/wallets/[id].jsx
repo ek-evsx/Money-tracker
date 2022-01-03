@@ -7,6 +7,7 @@ import { blue } from '@ant-design/colors';
 
 import { CircularProgress } from '../../components/CircularProgress';
 import { CreateExpenseType } from '../../components/CreateExpenseType';
+import { AddTransaction } from '../../components/AddTransaction';
 
 import getLayout from '../../utils/getLayout';
 import { DELAY } from '../../utils/constants';
@@ -273,6 +274,9 @@ export default function Wallet() {
 
         <Col span={16}>
           <Card loading={isLoading} className={styles.cardContainer}>
+            <Row justify='space-between'>
+              <AddTransaction />
+            </Row>
             <h1>Transactions list:</h1>
             {transactionData ? (
               <Table columns={columns} dataSource={transactionData} />

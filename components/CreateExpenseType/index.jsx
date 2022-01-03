@@ -106,7 +106,7 @@ export const CreateExpenseType = (props) => {
         icon={<PlusCircleOutlined />}
         onClick={showModal}
       >
-        Add
+        Add new type
       </Button>
       <Modal
         title='Create new expense type'

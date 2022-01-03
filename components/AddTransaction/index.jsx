@@ -7,7 +7,7 @@ import { AppContext } from '../../pages/_app';
 
 import { CURRENCIES } from '../../utils/constants';
 
-export const CreateWallet = () => {
+export const AddTransaction = () => {
   const appContext = useContext(AppContext);
   const [form] = Form.useForm();
 
@@ -33,7 +33,7 @@ export const CreateWallet = () => {
         icon={<PlusCircleOutlined />}
         onClick={showModal}
       >
-        Add
+        Add transaction
       </Button>
       <Modal
         title='Create new wallet'
